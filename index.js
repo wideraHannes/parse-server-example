@@ -6,6 +6,8 @@ import { ParseServer } from 'parse-server';
 import path from 'path';
 const __dirname = path.resolve();
 import http from 'http';
+import { CommentSchema } from './schemas/comment';
+import { PostSchema } from './schemas/post';
 
 export const config = {
   databaseURI: 'mongodb://localhost:27017/dev',
@@ -15,6 +17,10 @@ export const config = {
   serverURL: 'http://localhost:1337/parse', // Don't forget to change to https if needed
   liveQuery: {
     classNames: ['Posts', 'Comments'], // List of classes to support for query subscriptions
+  },
+  schema: {
+    definitions: [CommentSchema, PostSchema],
+    lockSchemas: true,
   },
 };
 // Client-keys like the javascript key or the .NET key are not necessary with parse-server
