@@ -4,13 +4,12 @@ export const CommentSchema = {
     text: { type: 'String', required: true },
     post: { type: 'Pointer', targetClass: 'Post' },
   },
-
   classLevelPermissions: {
-    find: { requiresAuthentication: true },
-    count: { 'role:Admin': true },
-    get: { requiresAuthentication: true },
-    update: { requiresAuthentication: true },
-    create: { 'role:Admin': true },
-    delete: { 'role:Admin': true },
+    find: { '*': true },
+    count: { '*': true },
+    get: { '*': true },
+    update: { '*': true },
+    create: { '*': true },
+    delete: { '*': true },
   },
 };
