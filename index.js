@@ -8,12 +8,11 @@ const __dirname = path.resolve();
 import http from 'http';
 
 export const config = {
-  databaseURI:
-    process.env.DATABASE_URI || process.env.MONGODB_URI || 'mongodb://localhost:27017/dev',
+  databaseURI: 'mongodb://localhost:27017/dev',
   cloud: process.env.CLOUD_CODE_MAIN || __dirname + '/cloud/main.js',
-  appId: process.env.APP_ID || 'myAppId',
-  masterKey: process.env.MASTER_KEY || '', //Add your master key here. Keep it secret!
-  serverURL: process.env.SERVER_URL || 'http://localhost:1337/parse', // Don't forget to change to https if needed
+  appId: 'myAppId',
+  masterKey: 'myMasterKey', //Add your master key here. Keep it secret!
+  serverURL: 'http://localhost:1337/parse', // Don't forget to change to https if needed
   liveQuery: {
     classNames: ['Posts', 'Comments'], // List of classes to support for query subscriptions
   },
@@ -46,11 +45,29 @@ app.get('/test', function (req, res) {
   res.sendFile(path.join(__dirname, '/public/test.html'));
 });
 
+import Dashboard from 'parse-dashboard';
+app.use(
+  '/dashboard',
+  new Dashboard({
+    apps: [
+      {
+        serverURL: 'http://localhost:1337/parse',
+        appId: 'myAppId',
+        masterKey: 'myMasterKey',
+        appName: 'myAppId',
+      },
+    ],
+  })
+);
+
 if (!process.env.TESTING) {
   const port = process.env.PORT || 1337;
   const httpServer = http.createServer(app);
   httpServer.listen(port, function () {
     console.log('parse-server-example running on port ' + port + '.');
+    console.log(
+      `${process.env.APP_NAME} Parse Dashboard is running on http://localhost:${port}/dashboard`
+    );
   });
   // This will enable the Live Query real-time server
   await ParseServer.createLiveQueryServer(httpServer);
